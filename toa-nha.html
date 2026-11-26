@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chi tiết tòa nhà | Minh Trí Group</title>
+<meta name="description" content="Thông số, doanh thu thuê và lợi suất của tòa nhà dòng tiền tại Hà Nội.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Noto+Serif:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="logo" href="./" data-brand>Minh Trí Group</a>
+  <nav class="nav"><a href="./">Bảng hàng</a><a href="tinh-dong-tien.html">Tính dòng tiền</a><a href="#lien-he">Liên hệ</a></nav>
+  <a class="call" data-tel href="#">☎ <span data-lien-he></span></a>
+</div></header>
+
+<main class="wrap" id="main"><div class="state">Đang tải…</div></main>
+
+<footer class="foot" id="lien-he"><div class="wrap">
+  <div><b data-brand>Minh Trí Group</b><div data-slogan></div><div style="margin-top:10px">Chuyên viên: <span data-lien-he></span></div><div><a data-zalo href="#">Nhắn Zalo</a> · <a data-tel href="#">Gọi ngay</a></div></div>
+  <div><small>Thông tin do chủ nhà cung cấp; doanh thu và lợi suất là số hiện tại để tham khảo, không phải cam kết lợi nhuận. Anh chị nên kiểm tra hồ sơ pháp lý, hợp đồng thuê và dòng tiền thực tế trước khi đặt cọc.</small><small>© <span data-nam></span> <span data-brand>Minh Trí Group</span></small></div>
+</div></footer>
+<div class="fab"><a class="t" data-tel href="#">Gọi</a><a class="z" data-zalo href="#">Zalo</a></div>
+
+<script src="assets/config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(async () => {
+  const { taiBangHang, fmt, pct, esc, viTri, nhanTrangThai, linkTinh, giaoDienChung } = BDS;
+  const main = document.getElementById("main");
+  const q = new URLSearchParams(location.search), ma = q.get("ma");
+  let ds = [], demo = false;
+  try { ({ ds, demo } = await taiBangHang()); } catch (e) { main.innerHTML = '<div class="state">Chưa tải được thông tin. Vui lòng thử lại sau.</div>'; return; }
+  const s = ds.find(x => x.ma === ma);
+  const back = "./" + (demo ? "?demo" : "");
+  if (!s) { main.innerHTML = `<div class="state">Không tìm thấy tòa này, có thể đã bán hoặc ngừng chào. <a href="${back}">Xem bảng hàng</a></div>`; return; }
+
+  document.title = `${s.loai || "Tòa nhà"} ${viTri(s)} | ${CAU_HINH.thuongHieu}`;
+  const ph = s.anhUrl ? `<img src="${esc(s.anhUrl)}" alt="${esc(s.loai + " " + viTri(s))}" referrerpolicy="no-referrer" onerror="this.remove()">` : "";
+  const rows = [
+    ["Loại hình", s.loai], ["Hình thức", s.hinhThuc], ["Khu vực", s.khuVuc], ["Phường", s.phuong],
+    ["Diện tích đất", isFinite(s.dtDatSo) ? fmt(s.dtDatSo, 1) + " m²" : ""], ["DT sử dụng", s.dtSuDung ? s.dtSuDung + " m²" : ""],
+    ["DT xây dựng", s.dtXayDung ? s.dtXayDung + " m²" : ""], ["Mặt tiền", s.matTien ? s.matTien + " m" : ""],
+    ["Số tầng", s.tang], ["Số phòng", s.phong], ["Đường / ngõ", s.ngo], ["Hiện trạng", s.hienTrang],
+    ["Pháp lý", s.phapLy], ["Đơn giá", isFinite(s.donGiaSo) ? fmt(s.donGiaSo) + " tr/m²" : ""], ["Cập nhật", s.capNhat]
+  ].filter(r => r[1]);
+  const flows = [];
+  if (isFinite(s.doanhThuSo)) flows.push(["Tự vận hành", s.doanhThuSo, s.loiSuatSo, "Doanh thu thuê hiện tại, chưa trừ chi phí vận hành"]);
+  if (isFinite(s.khoanSo)) flows.push(["Cho thuê khoán", s.khoanSo, s.loiSuatKhoan, "Giao cả tòa cho đơn vị vận hành, nhận tiền cố định"]);
+  const msg = encodeURIComponent(`Chào ${CAU_HINH.chuyenVien}, tôi quan tâm tòa ${s.ma} (${viTri(s)}).`);
+
+  main.innerHTML = `
+    <div class="crumb"><a href="${back}">Bảng hàng</a> / ${esc(s.khuVuc || "Hà Nội")} / ${esc(s.ma)}</div>
+    ${demo ? '<div class="demo-note"><b>Dữ liệu minh họa</b> – không phải sản phẩm thật.</div>' : ""}
+    <div class="d-head">
+      <div class="d-photo"><div class="ph" style="position:absolute;inset:0"><div class="noimg">${esc(s.loai || "Tòa nhà")}</div></div>${ph}<span class="badge">${esc(nhanTrangThai(s))}</span></div>
+      <div>
+        <div class="meta">${esc(s.ma)} · ${esc(s.loai)}</div>
+        <h1 class="d-title">${esc(viTri(s) || "Hà Nội")}</h1>
+        <div class="meta">${[s.phong && s.phong + " phòng", isFinite(s.dtDatSo) && fmt(s.dtDatSo, 1) + " m² đất", s.tang && s.tang + " tầng"].filter(Boolean).join(" · ")}</div>
+        <div class="d-price num">${isFinite(s.giaSo) ? fmt(s.giaSo, 1) + " tỷ" : "Giá: liên hệ"}</div>
+        ${isFinite(s.loiSuatSo) ? `<div class="yield num">Lợi suất gộp ${pct(s.loiSuatSo)}/năm</div>` : ""}
+        <div class="btns" style="margin-top:18px">
+          <a class="btn primary" data-zalo href="#">Nhắn Zalo nhận hồ sơ</a>
+          <a class="btn" href="${esc(linkTinh(s))}">Tự tính dòng tiền tòa này</a>
+        </div>
+        <p class="note">Địa chỉ cụ thể, sổ và hợp đồng thuê gửi khi anh chị liên hệ. Lời nhắn gợi ý: “${esc(decodeURIComponent(msg))}”</p>
+      </div>
+    </div>
+    ${flows.length ? `<h2 class="sec">Dòng tiền</h2><div class="flows">${flows.map(([k, v, y, n]) => `<div class="flow"><div class="k">${k}</div><b class="num">${fmt(v, 1)} tr/tháng</b><div class="yield num">${pct(y)}/năm</div><div class="note">${n}</div></div>`).join("")}</div>
+      <p class="note">Lợi suất gộp = doanh thu 12 tháng / giá bán. Muốn xem lợi suất ròng sau chi phí, thuế và khoản vay, dùng nút “Tự tính dòng tiền tòa này”.</p>` : ""}
+    <h2 class="sec">Thông số</h2>
+    <div class="kv">${rows.map(([k, v]) => `<div><span>${k}</span><b>${esc(v)}</b></div>`).join("")}</div>
+    ${s.moTa ? `<h2 class="sec">Tổng quan</h2><div class="prose">${esc(s.moTa)}</div>` : ""}
+  `;
+  giaoDienChung();
+})();
+</script>
+</body>
+</html>
