@@ -62,7 +62,7 @@ input,select{width:100%;font:inherit;color:var(--ink);background:var(--input);bo
 input:focus,select:focus{border-color:var(--gold)}
 .unit{position:absolute;right:12px;bottom:11px;font-size:13px;color:var(--muted);pointer-events:none}
 .field.has-unit input{padding-right:64px}
-input[type=number]{-moz-appearance:textfield}
+input[type=number]{-moz-appearance:textfield;text-align:right;font-variant-numeric:tabular-nums}
 input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
 
 /* Bảng phòng */
@@ -409,6 +409,17 @@ function applyContact() {
   else $("callBtn").style.display = "none";
 }
 applyContact();
+
+/* Số căn phải, đứng sát chữ đơn vị: chừa đúng bề rộng của đơn vị */
+function fitUnits() {
+  document.querySelectorAll(".field.has-unit").forEach(f => {
+    const u = f.querySelector(".unit"), i = f.querySelector("input");
+    if (u && i && u.offsetWidth) i.style.paddingRight = (u.offsetWidth + parseFloat(getComputedStyle(u).right) + 8) + "px";
+  });
+}
+fitUnits();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitUnits);
+$("addRoom").addEventListener("click", fitUnits);
 
 function toast(msg) { const t = $("toast"); t.textContent = msg; t.classList.add("on"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("on"), 3800); }
 

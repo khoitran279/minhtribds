@@ -22,3 +22,8 @@ Trang tĩnh (HTML/CSS/JS, không cần build), chạy trên GitHub Pages.
 - Không ghi số nhà; chỉ tên đường + quận.
 - Không dùng từ so sánh tuyệt đối, không hứa lợi nhuận. Doanh thu/lợi suất là số hiện tại để tham khảo.
 - Không đăng tòa chưa có hợp đồng môi giới hoặc ủy quyền của chủ nhà.
+
+## Quy tắc giao diện
+- Ô và cột chứa số căn phải; ô chữ căn trái; không căn giữa số. Ô có đơn vị thì số đứng sát trước đơn vị (hàm `fitUnits` trong `tinh-dong-tien.html`).
+- Lưới ô nhập căn theo đáy (`align-items: end`) để nhãn dài không làm lệch ô bên cạnh.
+- Kiểm tra ở khổ máy tính và 375px: không tràn ngang.
