@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tòa nhà dòng tiền Hà Nội | Minh Trí Group</title>
+<meta name="description" content="Bảng hàng tòa nhà dòng tiền tại Hà Nội: căn hộ dịch vụ, văn phòng cho thuê, nhà mặt phố. Có số phòng, doanh thu thuê và lợi suất từng tòa, kèm công cụ tự tính dòng tiền.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Noto+Serif:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="logo" href="./" data-brand>Minh Trí Group</a>
+  <nav class="nav"><a href="./" aria-current="page">Bảng hàng</a><a href="tinh-dong-tien.html">Tính dòng tiền</a><a href="#lien-he">Liên hệ</a></nav>
+  <a class="call" data-tel href="#">☎ <span data-lien-he></span></a>
+</div></header>
+
+<section class="hero"><div class="wrap">
+  <div class="eyebrow" id="updated">Bảng hàng</div>
+  <h1>Tòa nhà dòng tiền tại Hà Nội</h1>
+  <p>Căn hộ dịch vụ, văn phòng cho thuê, nhà mặt phố và đất xây các mô hình này. Mỗi tòa có số phòng, doanh thu thuê hiện tại và lợi suất để anh chị so sánh nhanh.</p>
+  <div class="stats">
+    <div class="stat"><b class="num" id="sCount">–</b><span>tòa đang chào</span></div>
+    <div class="stat"><b class="num" id="sMin">–</b><span>giá thấp nhất</span></div>
+    <div class="stat"><b class="num" id="sYield">–</b><span>lợi suất gộp cao nhất/năm</span></div>
+  </div>
+</div></section>
+
+<main class="wrap">
+  <div id="demoNote"></div>
+  <div class="filters">
+    <select id="fArea" aria-label="Khu vực"><option value="">Tất cả khu vực</option></select>
+    <select id="fType" aria-label="Loại hình"><option value="">Tất cả loại hình</option></select>
+    <select id="fPrice" aria-label="Khoảng giá">
+      <option value="">Mọi tầm giá</option><option value="0-15">Dưới 15 tỷ</option><option value="15-20">15 – 20 tỷ</option>
+      <option value="20-30">20 – 30 tỷ</option><option value="30-50">30 – 50 tỷ</option><option value="50-9999">Trên 50 tỷ</option>
+    </select>
+    <select id="fSort" aria-label="Sắp xếp">
+      <option value="">Mới cập nhật</option><option value="yield">Lợi suất cao nhất</option>
+      <option value="price-asc">Giá thấp đến cao</option><option value="price-desc">Giá cao đến thấp</option>
+    </select>
+    <span class="count" id="count"></span>
+  </div>
+  <div class="chips" id="areaChips"></div>
+  <div class="grid" id="grid"><div class="state">Đang tải bảng hàng…</div></div>
+
+  <h2 class="sec">So sánh nhanh</h2>
+  <div class="tbl-wrap"><table class="tbl" id="tbl"></table></div>
+</main>
+
+<section class="band"><div class="wrap">
+  <div>
+    <h2>Tòa nhà này có đáng xuống tiền?</h2>
+    <p>Nhập giá, cơ cấu phòng, chi phí và khoản vay. Công cụ tính ngay lợi suất ròng, dòng tiền mỗi tháng và số năm hoàn vốn, kể cả với tòa anh chị đang xem ở nơi khác.</p>
+  </div>
+  <div class="btns"><a class="btn primary" href="tinh-dong-tien.html">Tính dòng tiền tòa nhà</a></div>
+</div></section>
+
+<footer class="foot" id="lien-he"><div class="wrap">
+  <div><b data-brand>Minh Trí Group</b><div data-slogan></div><div style="margin-top:10px">Chuyên viên: <span data-lien-he></span></div><div><a data-zalo href="#">Nhắn Zalo</a> · <a data-tel href="#">Gọi ngay</a></div></div>
+  <div><small>Thông tin sản phẩm do chủ nhà cung cấp và được cập nhật định kỳ; số liệu doanh thu, lợi suất là số hiện tại để tham khảo, không phải cam kết lợi nhuận. Vị trí chỉ ghi tên đường; địa chỉ cụ thể và hồ sơ pháp lý gửi khi anh chị liên hệ.</small><small>© <span data-nam></span> <span data-brand>Minh Trí Group</span></small></div>
+</div></footer>
+<div class="fab"><a class="t" data-tel href="#">Gọi</a><a class="z" data-zalo href="#">Zalo</a></div>
+
+<script src="assets/config.js"></script>
+<script src="assets/app.js"></script>
+<script>
+(async () => {
+  const { taiBangHang, fmt, pct, esc, viTri, dangBan, nhanTrangThai } = BDS;
+  const grid = document.getElementById("grid");
+  let ds = [], demo = false;
+  try { ({ ds, demo } = await taiBangHang()); }
+  catch (e) { grid.innerHTML = '<div class="state">Chưa tải được bảng hàng. Anh chị vui lòng thử lại sau hoặc nhắn Zalo để nhận danh sách.</div>'; return; }
+  if (demo) document.getElementById("demoNote").innerHTML = '<div class="demo-note"><b>Dữ liệu minh họa</b> – chỉ để xem bố cục, không phải sản phẩm thật.</div>';
+
+  const dang = ds.filter(dangBan);
+  document.getElementById("sCount").textContent = fmt(dang.length);
+  const gias = dang.map(s => s.giaSo).filter(isFinite);
+  document.getElementById("sMin").textContent = gias.length ? fmt(Math.min(...gias), 1) + " tỷ" : "–";
+  const ys = dang.map(s => s.loiSuatSo).filter(isFinite);
+  document.getElementById("sYield").textContent = ys.length ? pct(Math.max(...ys)) : "–";
+  const ngay = ds.map(s => s.capNhat).filter(Boolean).sort((a, b) => toDate(b) - toDate(a))[0];
+  if (ngay) document.getElementById("updated").textContent = "Bảng hàng · cập nhật " + ngay;
+  function toDate(s) { const m = String(s).match(/(\d{1,2})\/(\d{1,2})\/(\d{4})/); return m ? new Date(+m[3], m[2] - 1, +m[1]) : new Date(0); }
+
+  // Bộ lọc
+  const uniq = k => [...new Set(ds.map(s => s[k]).filter(Boolean))].sort((a, b) => a.localeCompare(b, "vi"));
+  const fArea = document.getElementById("fArea"), fType = document.getElementById("fType");
+  uniq("khuVuc").forEach(v => fArea.add(new Option(v + " (" + ds.filter(s => s.khuVuc === v).length + ")", v)));
+  uniq("loai").forEach(v => fType.add(new Option(v, v)));
+  const chips = document.getElementById("areaChips");
+  chips.innerHTML = uniq("khuVuc").map(v => `<button class="chip" type="button" data-v="${esc(v)}" aria-pressed="false">${esc(v)} <span class="num">${ds.filter(s => s.khuVuc === v).length}</span></button>`).join("");
+  chips.onclick = e => { const b = e.target.closest(".chip"); if (!b) return; fArea.value = fArea.value === b.dataset.v ? "" : b.dataset.v; render(); };
+  ["fArea", "fType", "fPrice", "fSort"].forEach(id => document.getElementById(id).onchange = render);
+
+  function render() {
+    const area = fArea.value, type = fType.value, pr = document.getElementById("fPrice").value, sort = document.getElementById("fSort").value;
+    let list = ds.filter(s => (!area || s.khuVuc === area) && (!type || s.loai === type));
+    if (pr) { const [a, b] = pr.split("-").map(Number); list = list.filter(s => s.giaSo >= a && s.giaSo < b); }
+    if (sort === "yield") list.sort((a, b) => (b.loiSuatSo || 0) - (a.loiSuatSo || 0));
+    else if (sort === "price-asc") list.sort((a, b) => (a.giaSo || 1e9) - (b.giaSo || 1e9));
+    else if (sort === "price-desc") list.sort((a, b) => (b.giaSo || 0) - (a.giaSo || 0));
+    list.sort((a, b) => dangBan(b) - dangBan(a));
+    chips.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", c.dataset.v === area));
+    document.getElementById("count").textContent = list.length + " tòa";
+    grid.innerHTML = list.length ? list.map(card).join("") : '<div class="state">Chưa có tòa phù hợp bộ lọc. Nhắn Zalo để được gửi hàng chưa đăng.</div>';
+    document.getElementById("tbl").innerHTML = "<thead><tr><th>Mã</th><th>Vị trí</th><th>Loại hình</th><th class='r'>Phòng</th><th class='r'>DT đất</th><th class='r'>Giá</th><th class='r'>Doanh thu/tháng</th><th class='r'>Lợi suất gộp</th><th>Trạng thái</th></tr></thead><tbody>" +
+      list.map(s => `<tr><td><a href="toa-nha.html?ma=${encodeURIComponent(s.ma)}">${esc(s.ma)}</a></td><td>${esc(viTri(s))}</td><td>${esc(s.loai)}</td><td class="r num">${esc(s.phong || "–")}</td><td class="r num">${isFinite(s.dtDatSo) ? fmt(s.dtDatSo, 1) + " m²" : "–"}</td><td class="r num">${isFinite(s.giaSo) ? fmt(s.giaSo, 1) + " tỷ" : "–"}</td><td class="r num">${isFinite(s.doanhThuSo) ? fmt(s.doanhThuSo, 1) + " tr" : "–"}</td><td class="r num">${pct(s.loiSuatSo)}</td><td>${esc(nhanTrangThai(s))}</td></tr>`).join("") + "</tbody>";
+  }
+  function card(s) {
+    const sold = !dangBan(s);
+    const ph = s.anhUrl ? `<img src="${esc(s.anhUrl)}" alt="${esc(s.loai + " " + viTri(s))}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">` : "";
+    const specs = [["Phòng", s.phong], ["DT đất", isFinite(s.dtDatSo) ? fmt(s.dtDatSo, 1) + " m²" : ""], ["Số tầng", s.tang], ["Doanh thu", isFinite(s.doanhThuSo) ? fmt(s.doanhThuSo, 1) + " tr/th" : ""], ["Đơn giá", isFinite(s.donGiaSo) ? fmt(s.donGiaSo) + " tr/m²" : ""], ["Mặt tiền", s.matTien ? s.matTien + " m" : ""]].filter(x => x[1]).slice(0, 6);
+    return `<a class="card" href="toa-nha.html?ma=${encodeURIComponent(s.ma)}">
+      <div class="ph"><div class="noimg">${esc(s.loai || "Tòa nhà")}</div>${ph}<span class="badge${sold ? " sold" : ""}">${esc(nhanTrangThai(s))}</span></div>
+      <div class="body">
+        <div class="meta">${esc(s.ma)} · ${esc(s.loai)}${s.hinhThuc && s.hinhThuc !== "Bán" ? " · " + esc(s.hinhThuc) : ""}</div>
+        <h3 class="title">${esc(viTri(s) || "Hà Nội")}</h3>
+        <div class="specs">${specs.map(([k, v]) => `<div>${k}<b class="num">${esc(v)}</b></div>`).join("")}</div>
+        <div class="price"><b class="num">${isFinite(s.giaSo) ? fmt(s.giaSo, 1) + " tỷ" : "Liên hệ"}</b>${isFinite(s.loiSuatSo) ? `<span class="yield num">${pct(s.loiSuatSo)}/năm</span>` : ""}</div>
+        <span class="more">Xem chi tiết →</span>
+      </div></a>`;
+  }
+  render();
+})();
+</script>
+</body>
+</html>

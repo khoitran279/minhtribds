@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tính dòng tiền tòa nhà | Minh Trí Group</title>
+<meta name="description" content="Tự đánh giá lợi suất và dòng tiền tòa nhà cho thuê trong 2 phút.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Noto+Serif:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* =========================================================
+   CẤU HÌNH NHANH: sửa thông tin liên hệ ở cuối file (const LIEN_HE)
+   ========================================================= */
+:root{
+  --navy:#141413; --navy-2:#2a2826; --gold:#c4552a; --gold-soft:#f1ebe4;
+  --bg:#f4f2ef; --card:#ffffff; --ink:#161514; --muted:#86827c; --line:#dcd8d1;
+  --good:#1e7a46; --good-bg:#e3f3e9; --warn:#a8650c; --warn-bg:#fcefdc; --bad:#b3261e; --bad-bg:#fbe3e1;
+  --input:#fbfaf8;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0f1520; --card:#18202d; --ink:#e7ebf2; --muted:#9aa6b8; --line:#2b3546;
+    --gold-soft:#2a2420; --input:#1f2836;
+    --good-bg:#16352a; --warn-bg:#3a2c16; --bad-bg:#3d1e1c; --good:#5fd08f; --warn:#f0b35a; --bad:#ff8a80;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0f1520; --card:#18202d; --ink:#e7ebf2; --muted:#9aa6b8; --line:#2b3546;
+  --gold-soft:#2a2420; --input:#1f2836;
+  --good-bg:#16352a; --warn-bg:#3a2c16; --bad-bg:#3d1e1c; --good:#5fd08f; --warn:#f0b35a; --bad:#ff8a80;
+}
+:root[data-theme="dark"] .num{background:var(--gold);color:var(--navy)}
+:root[data-theme="dark"] .add{color:var(--gold)}
+:root[data-theme="dark"] .kpi .v{color:var(--gold)}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:15px;line-height:1.5}
+.wrap{max-width:860px;margin:0 auto;padding:20px 16px 48px}
+.sheet{background:var(--card);border-radius:4px;box-shadow:0 10px 40px rgba(19,41,75,.12);overflow:hidden}
+
+/* Header phiếu */
+.head{background:linear-gradient(135deg,var(--navy),var(--navy-2));color:#fff;padding:26px 24px 22px;position:relative}
+.head::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--gold)}
+.brand{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:13px;opacity:.9}
+.brand b{color:var(--gold);letter-spacing:.06em;text-transform:uppercase}
+.head h1{margin:14px 0 6px;font-family:"Noto Serif",serif;font-size:clamp(24px,4.6vw,34px);line-height:1.2;font-weight:400;letter-spacing:.01em}
+.head p{margin:0;opacity:.85;max-width:560px}
+.stamp{display:inline-block;margin-top:14px;border:1.5px solid var(--gold);color:var(--gold);border-radius:999px;padding:3px 12px;font-size:12px;font-weight:600;letter-spacing:.04em}
+
+/* Section */
+.sec{padding:22px 24px;border-top:1px solid var(--line)}
+.sec h2{display:flex;align-items:center;gap:10px;margin:0 0 14px;font-size:16px;font-weight:700;color:var(--ink)}
+.num{flex:none;width:28px;height:28px;border-radius:50%;background:var(--navy);color:var(--gold);display:grid;place-items:center;font-size:14px;font-weight:800}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .num{background:var(--gold);color:var(--navy)}}
+.hint{font-size:12.5px;color:var(--muted);margin:-8px 0 14px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px}
+.full{grid-column:1/-1}
+label{display:block;font-size:13px;font-weight:600;color:var(--muted);margin-bottom:5px}
+.field{position:relative}
+input,select{width:100%;font:inherit;color:var(--ink);background:var(--input);border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;min-height:44px;outline:none;transition:border-color .15s}
+input:focus,select:focus{border-color:var(--gold)}
+.unit{position:absolute;right:12px;bottom:11px;font-size:13px;color:var(--muted);pointer-events:none}
+.field.has-unit input{padding-right:64px}
+input[type=number]{-moz-appearance:textfield}
+input::-webkit-outer-spin-button,input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+
+/* Bảng phòng */
+.rooms{width:100%;border-collapse:separate;border-spacing:0 8px}
+.rooms th{font-size:12px;font-weight:600;color:var(--muted);text-align:left;padding:0 6px}
+.rooms td{padding:0 4px;vertical-align:middle}
+.rooms td:first-child{padding-left:0}
+.rooms .del{background:none;border:0;color:var(--muted);font-size:20px;cursor:pointer;width:36px;height:44px;border-radius:8px}
+.rooms .del:hover{background:var(--bad-bg);color:var(--bad)}
+.rooms .sub{font-weight:600;white-space:nowrap;text-align:right;padding-right:6px}
+.add{margin-top:4px;background:none;border:1.5px dashed var(--line);color:var(--navy-2);font:inherit;font-weight:600;border-radius:10px;padding:9px 14px;cursor:pointer;width:100%}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .add{color:var(--gold)}}
+.total{display:flex;justify-content:space-between;margin-top:10px;padding:10px 12px;background:var(--gold-soft);border-radius:10px;font-weight:600}
+
+/* Kết quả */
+.result{background:linear-gradient(180deg,var(--gold-soft),transparent 70%)}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.kpi{background:var(--card);border:1.5px solid var(--line);border-radius:14px;padding:14px;text-align:center}
+.kpi.main{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-soft)}
+.kpi .k{font-size:12.5px;color:var(--muted);font-weight:600}
+.kpi .v{font-size:clamp(22px,4.2vw,30px);font-weight:800;color:var(--navy);margin:4px 0 2px;font-variant-numeric:tabular-nums}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .kpi .v{color:var(--gold)}}
+.kpi .s{font-size:12px;color:var(--muted)}
+.rows{margin-top:16px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+.row{display:flex;justify-content:space-between;gap:12px;padding:10px 14px;border-top:1px solid var(--line)}
+.row:first-child{border-top:0}
+.row span:last-child{font-weight:700;font-variant-numeric:tabular-nums;text-align:right}
+.row.hl{background:var(--gold-soft)}
+.tag{display:inline-block;padding:2px 10px;border-radius:999px;font-size:12px;font-weight:700}
+.tag.good{background:var(--good-bg);color:var(--good)} .tag.warn{background:var(--warn-bg);color:var(--warn)} .tag.bad{background:var(--bad-bg);color:var(--bad)}
+
+/* Độ nhạy */
+.sens{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums;font-size:14px}
+.sens th,.sens td{border:1px solid var(--line);padding:9px 6px;text-align:center}
+.sens th{background:var(--navy);color:#fff;font-weight:600;font-size:12.5px}
+.sens td:first-child{font-weight:700;background:var(--gold-soft)}
+.sens td.good{background:var(--good-bg);color:var(--good);font-weight:700}
+.sens td.warn{background:var(--warn-bg);color:var(--warn);font-weight:700}
+.sens td.bad{background:var(--bad-bg);color:var(--bad);font-weight:700}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:8px}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+
+/* Vay */
+.toggle{display:flex;align-items:center;gap:10px;font-weight:600;cursor:pointer;user-select:none}
+.toggle input{width:20px;height:20px;min-height:0;accent-color:var(--navy)}
+#loanBox[hidden]{display:none}
+
+/* Liên hệ / CTA */
+.cta{background:var(--navy);color:#fff}
+.cta h2{color:#fff}
+.cta label{color:#c8d2e3}
+.cta input,.cta select{background:#fff;color:#1b2330;border-color:transparent}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.btn{flex:1 1 200px;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;border-radius:12px;border:0;font:inherit;font-weight:700;cursor:pointer;text-decoration:none;padding:0 16px}
+.btn.gold{background:var(--gold);color:#fff}
+.btn.ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.5)}
+.btn:hover{filter:brightness(1.06)}
+.note{font-size:12px;color:#c8d2e3;margin-top:12px}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:#111a;backdrop-filter:blur(6px);background:rgba(17,26,40,.92);color:#fff;padding:10px 16px;border-radius:10px;font-size:14px;opacity:0;transition:.25s;pointer-events:none;max-width:calc(100% - 32px);text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%)}
+.foot{padding:16px 24px 22px;font-size:12px;color:var(--muted);border-top:1px solid var(--line)}
+.err{color:var(--bad);font-size:12.5px;margin-top:6px;display:none}
+.cta .err{color:#ffb4ab}
+.consent{display:flex;gap:10px;align-items:flex-start;margin-top:14px;font-size:13px;font-weight:400;line-height:1.45;color:#dfe6f2;cursor:pointer}
+.consent input{flex:none;width:20px;height:20px;min-height:0;margin:1px 0 0;accent-color:var(--gold)}
+
+@media (max-width:620px){
+  .wrap{padding:12px 12px 40px}
+  .head,.sec,.foot{padding-left:16px;padding-right:16px}
+  .grid{grid-template-columns:1fr}
+  .kpis{grid-template-columns:1fr 1fr}
+  .kpi.main{grid-column:1/-1}
+  .rooms th:nth-child(4),.rooms td:nth-child(4){display:none}
+}
+@media print{
+  body{background:#fff}
+  .wrap{padding:0;max-width:none}
+  .sheet{box-shadow:none;border-radius:0}
+  .add,.del,.btns,.cta .note,#contactFields,#consentBox,.toast{display:none!important}
+  .sec{break-inside:avoid}
+  .cta{background:#fff;color:#000}
+  .cta h2{color:#000}
+}
+.sitebar{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.sitebar .in{max-width:860px;margin:0 auto;padding:0 16px;height:56px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.sitebar a{text-decoration:none;color:var(--ink)}
+.sitebar .lg{font-family:"Noto Serif",serif;font-size:18px}
+.sitebar nav{display:flex;gap:18px;font-size:14px}
+.sitebar nav a{color:var(--muted)}
+.prefill{background:var(--gold-soft);border-radius:4px;padding:10px 12px;font-size:13px;margin:-4px 0 14px}
+</style>
+</head>
+<body>
+<div class="sitebar"><div class="in"><a class="lg" href="./" id="siteBrand">Minh Trí Group</a><nav><a href="./">Bảng hàng</a><a href="tinh-dong-tien.html" style="color:var(--ink)">Tính dòng tiền</a></nav></div></div>
+<div class="wrap">
+<div class="sheet">
+
+  <header class="head">
+    <div class="brand"><b id="brandName">Minh Trí Group</b><span id="brandLine">Chuyên mua bán tòa nhà dòng tiền tại Hà Nội</span></div>
+    <h1>Tòa nhà này có đáng xuống tiền?</h1>
+    <p>Nhập vài thông số, phiếu tự tính lợi suất, dòng tiền và số năm hoàn vốn của tòa nhà. Miễn phí, mất khoảng 2 phút.</p>
+    <span class="stamp">CĂN HỘ DỊCH VỤ · VĂN PHÒNG · NHÀ CHO THUÊ</span>
+    <div id="prefillNote"></div>
+  </header>
+
+  <section class="sec">
+    <h2><span class="num">1</span>Thông tin tòa nhà</h2>
+    <div class="grid">
+      <div class="full"><label for="name">Tên / địa chỉ tòa</label><input id="name" placeholder="VD: Tòa CHDV ngõ 12 Trần Duy Hưng, Cầu Giấy"></div>
+      <div class="field has-unit"><label for="price">Giá bán / giá mua</label><input id="price" type="number" inputmode="decimal" step="0.1" value="25"><span class="unit">tỷ</span></div>
+      <div class="field has-unit"><label for="fee">Thuế, phí, môi giới khi mua</label><input id="fee" type="number" inputmode="decimal" step="0.1" value="2"><span class="unit">% giá</span></div>
+      <div class="field has-unit full"><label for="reno">Chi phí cải tạo, nội thất ban đầu</label><input id="reno" type="number" inputmode="decimal" value="500"><span class="unit">triệu</span></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2><span class="num">2</span>Cơ cấu phòng cho thuê</h2>
+    <p class="hint">Mỗi dòng là một loại phòng. Giá thuê tính theo triệu đồng/tháng/phòng.</p>
+    <table class="rooms" id="rooms">
+      <thead><tr><th>Loại phòng</th><th style="width:84px">Số phòng</th><th style="width:110px">Giá thuê</th><th style="width:96px;text-align:right">Tối đa/tháng</th><th style="width:36px"></th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <button class="add" id="addRoom" type="button">+ Thêm loại phòng</button>
+    <div class="total"><span id="roomCount">0 phòng</span><span id="maxRev">0 tr/tháng</span></div>
+  </section>
+
+  <section class="sec">
+    <h2><span class="num">3</span>Doanh thu &amp; chi phí vận hành</h2>
+    <div class="grid">
+      <div class="field has-unit"><label for="occ">Tỷ lệ lấp đầy</label><input id="occ" type="number" inputmode="decimal" min="0" max="100" value="90"><span class="unit">%</span></div>
+      <div class="field has-unit"><label for="other">Thu khác: dịch vụ, gửi xe, điện nước</label><input id="other" type="number" inputmode="decimal" value="8"><span class="unit">tr/tháng</span></div>
+      <div class="field has-unit"><label for="fixed">Chi phí cố định: điện nước chung, vệ sinh, quản lý, internet, PCCC…</label><input id="fixed" type="number" inputmode="decimal" value="21.5"><span class="unit">tr/tháng</span></div>
+      <div class="field has-unit"><label for="maint">Bảo trì, sửa chữa</label><input id="maint" type="number" inputmode="decimal" value="5"><span class="unit">% DT</span></div>
+      <div class="field has-unit"><label for="tax">Thuế cho thuê</label><input id="tax" type="number" inputmode="decimal" value="10"><span class="unit">% DT</span></div>
+      <div class="field has-unit"><label for="target">Lợi suất ròng mong muốn</label><input id="target" type="number" inputmode="decimal" step="0.1" value="6"><span class="unit">%/năm</span></div>
+    </div>
+  </section>
+
+  <section class="sec">
+    <h2><span class="num">4</span>Vay ngân hàng</h2>
+    <label class="toggle"><input type="checkbox" id="useLoan" checked> Mua có sử dụng vốn vay</label>
+    <div id="loanBox" style="margin-top:14px">
+      <div class="grid">
+        <div class="field has-unit"><label for="ltv">Tỷ lệ vay</label><input id="ltv" type="number" inputmode="decimal" min="0" max="90" value="50"><span class="unit">% giá</span></div>
+        <div class="field has-unit"><label for="rate">Lãi suất vay</label><input id="rate" type="number" inputmode="decimal" step="0.1" value="10"><span class="unit">%/năm</span></div>
+        <div class="field has-unit"><label for="term">Thời hạn vay</label><input id="term" type="number" inputmode="numeric" value="15"><span class="unit">năm</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec result" aria-live="polite">
+    <h2><span class="num">5</span>Kết quả đánh giá</h2>
+    <div class="kpis">
+      <div class="kpi main"><div class="k">Lợi suất ròng / năm</div><div class="v" id="kNet">–</div><div class="s" id="kNetTag"></div></div>
+      <div class="kpi"><div class="k" id="kCfLabel">Dòng tiền ròng / tháng</div><div class="v" id="kCf">–</div><div class="s" id="kCfSub">triệu đồng</div></div>
+      <div class="kpi"><div class="k">Hoàn vốn</div><div class="v" id="kPay">–</div><div class="s">năm</div></div>
+    </div>
+    <div class="rows" id="detail"></div>
+  </section>
+
+  <section class="sec">
+    <h2><span class="num">6</span>Nếu thị trường thay đổi?</h2>
+    <p class="hint">Lợi suất ròng khi tỷ lệ lấp đầy và giá thuê thay đổi.</p>
+    <div style="overflow-x:auto"><table class="sens" id="sens"></table></div>
+    <div class="legend"><span><i style="background:var(--good-bg);border:1px solid var(--good)"></i>Đạt mức mong muốn</span><span><i style="background:var(--warn-bg);border:1px solid var(--warn)"></i>Dưới mức mong muốn</span><span><i style="background:var(--bad-bg);border:1px solid var(--bad)"></i>Lỗ</span></div>
+  </section>
+
+  <section class="sec cta">
+    <h2><span class="num">7</span>Nhận tư vấn miễn phí</h2>
+    <p style="margin:-6px 0 14px;color:#c8d2e3">Gửi phiếu này cho chuyên viên để được định giá, tìm khách mua hoặc tìm tòa phù hợp.</p>
+    <div class="grid" id="contactFields">
+      <div><label for="cName">Họ tên</label><input id="cName" autocomplete="name" placeholder="Nguyễn Văn A"></div>
+      <div><label for="cPhone">Số điện thoại</label><input id="cPhone" type="tel" inputmode="tel" autocomplete="tel" placeholder="09xx xxx xxx"></div>
+      <div class="full"><label for="cNeed">Anh/chị cần</label>
+        <select id="cNeed">
+          <option>Bán tòa nhà này</option>
+          <option>Mua tòa nhà dòng tiền</option>
+          <option>Ước tính giá trị tòa nhà</option>
+          <option>Tư vấn vận hành, tăng lợi suất</option>
+        </select>
+      </div>
+    </div>
+    <label class="consent" id="consentBox"><input type="checkbox" id="consent"><span>Tôi đồng ý cung cấp họ tên, số điện thoại và thông tin trong phiếu này cho <b id="consentBrand">Minh Trí Group</b> để được liên hệ tư vấn. Thông tin chỉ dùng cho mục đích tư vấn, không chia sẻ cho bên thứ ba.</span></label>
+    <div class="err" id="err">Vui lòng nhập họ tên và số điện thoại để chuyên viên liên hệ lại.</div>
+    <div class="btns">
+      <button class="btn gold" id="sendZalo" type="button">Gửi phiếu qua Zalo</button>
+      <a class="btn ghost" id="callBtn" href="#" target="_blank" rel="noopener">Gọi ngay</a>
+      <button class="btn ghost" id="printBtn" type="button">Lưu phiếu PDF</button>
+    </div>
+    <p class="note">Bấm "Gửi phiếu qua Zalo": nội dung phiếu được sao chép sẵn, Zalo mở ra, anh/chị chỉ cần dán (giữ ngón tay → Dán) và gửi.</p>
+  </section>
+
+  <footer class="foot">
+    Kết quả là ước tính dựa trên số liệu anh/chị nhập, chỉ để tham khảo, không phải cam kết lợi nhuận hay tư vấn đầu tư. Thuế, phí và lãi suất thực tế tùy từng trường hợp.
+    <div style="margin-top:6px" id="footContact"></div>
+  </footer>
+</div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script src="assets/config.js"></script>
+<script>
+/* =========================================================
+   THÔNG TIN LIÊN HỆ – SỬA 4 DÒNG NÀY TRƯỚC KHI ĐĂNG
+   zalo: số điện thoại đăng ký Zalo, viết liền, ví dụ "0912345678"
+   ========================================================= */
+const LIEN_HE = {
+  thuongHieu: CAU_HINH.thuongHieu,
+  nguoiPhuTrach: CAU_HINH.chuyenVien,
+  dienThoai: CAU_HINH.dienThoai,
+  zalo: CAU_HINH.zalo
+};
+document.getElementById("siteBrand").textContent = CAU_HINH.thuongHieu;
+
+const $ = id => document.getElementById(id);
+const num = id => { const v = parseFloat(String($(id).value).replace(",", ".")); return isFinite(v) ? v : 0; };
+const fmt = (v, d = 0) => isFinite(v) ? v.toLocaleString("vi-VN", { minimumFractionDigits: d, maximumFractionDigits: d }) : "–";
+const pct = (v, d = 2) => isFinite(v) ? fmt(v * 100, d) + "%" : "–";
+
+/* --- Cơ cấu phòng --- */
+const tbody = document.querySelector("#rooms tbody");
+function addRoom(name = "", n = "", r = "") {
+  const tr = document.createElement("tr");
+  tr.innerHTML = `<td><input class="rn" placeholder="VD: Studio" value="${name}"></td>
+    <td><input class="rc" type="number" inputmode="numeric" value="${n}"></td>
+    <td><div class="field has-unit"><input class="rr" type="number" inputmode="decimal" step="0.1" value="${r}" style="padding-right:30px"><span class="unit" style="right:8px">tr</span></div></td>
+    <td class="sub">–</td>
+    <td><button class="del" type="button" aria-label="Xóa dòng">×</button></td>`;
+  tr.querySelector(".del").onclick = () => { tr.remove(); calc(); };
+  tbody.appendChild(tr);
+}
+const Q = new URLSearchParams(location.search);
+if (Q.has("gia")) {
+  // Mở từ trang chi tiết: điền sẵn giá, số phòng và giá thuê bình quân (= doanh thu hiện tại / số phòng)
+  $("name").value = (Q.get("ma") ? Q.get("ma") + " · " : "") + (Q.get("ten") || "");
+  $("price").value = Q.get("gia");
+  if (Q.get("phong")) addRoom("Phòng (giá thuê bình quân)", Q.get("phong"), Q.get("thue") || "");
+  else addRoom();
+  $("occ").value = 100; $("other").value = 0;
+  $("prefillNote").innerHTML = '<p class="prefill" style="color:var(--ink);margin-top:14px">Đã điền sẵn giá và doanh thu hiện tại của tòa (lấp đầy 100%, thu khác 0). Chi phí vận hành, thuế và khoản vay đang là số mặc định, anh chị chỉnh theo thực tế.</p>';
+} else {
+  [["Studio", 20, 6], ["1 phòng ngủ", 8, 8.5], ["Mặt bằng tầng 1", 1, 25]].forEach(r => addRoom(...r));
+}
+$("addRoom").onclick = () => { addRoom(); tbody.lastElementChild.querySelector(".rn").focus(); };
+
+$("useLoan").onchange = () => { $("loanBox").hidden = !$("useLoan").checked; calc(); };
+
+/* --- Tính toán (giống file Google Sheet "Phân tích tài chính tòa nhà cho thuê") --- */
+function noiFor(M, occ, other, F, p) { return ((M * occ + other) * (1 - p) - F) * 12; }
+
+let last = {};
+function calc() {
+  let rooms = 0, M = 0;
+  tbody.querySelectorAll("tr").forEach(tr => {
+    const n = parseFloat(tr.querySelector(".rc").value) || 0;
+    const r = parseFloat(tr.querySelector(".rr").value) || 0;
+    rooms += n; M += n * r;
+    tr.querySelector(".sub").textContent = n && r ? fmt(n * r, 1) : "–";
+  });
+  $("roomCount").textContent = fmt(rooms) + " phòng";
+  $("maxRev").textContent = fmt(M, 1) + " tr/tháng (lấp đầy 100%)";
+
+  const price = num("price"), fee = num("fee") / 100, reno = num("reno");
+  const occ = Math.min(Math.max(num("occ"), 0), 100) / 100, other = num("other");
+  const F = num("fixed"), p = (num("maint") + num("tax")) / 100, target = num("target") / 100;
+
+  const V = price * 1000 * (1 + fee) + reno;
+  const Rm = M * occ + other, Ry = Rm * 12;
+  const costY = (F + Rm * p) * 12;
+  const NOI = Ry - costY;
+  const gross = Ry / V, net = NOI / V, pay = NOI > 0 ? V / NOI : NaN;
+  const be = M > 0 ? Math.max(0, (F / (1 - p) - other) / M) : NaN;
+  const maxPrice = target > 0 ? Math.max(0, (NOI / target - reno) / (1 + fee) / 1000) : NaN;
+
+  const loan = $("useLoan").checked;
+  const L = loan ? price * 1000 * num("ltv") / 100 : 0;
+  const r = num("rate") / 100 / 12, nper = num("term") * 12;
+  const pmt = L > 0 && nper > 0 ? (r > 0 ? L * r / (1 - Math.pow(1 + r, -nper)) : L / nper) : 0;
+  const debtY = pmt * 12;
+  let int1 = 0, bal = L;
+  for (let i = 0; i < 12 && i < nper; i++) { const it = bal * r; int1 += it; bal -= (pmt - it); }
+  const equity = V - L, cfY = NOI - debtY;
+  const coc = cfY / equity, dscr = debtY > 0 ? NOI / debtY : NaN;
+
+  // KPI
+  $("kNet").textContent = V > 0 ? pct(net) : "–";
+  const tg = $("kNetTag");
+  if (!(V > 0) || !isFinite(net)) tg.innerHTML = "";
+  else if (net < 0) tg.innerHTML = '<span class="tag bad">Đang lỗ</span>';
+  else if (net >= target) tg.innerHTML = '<span class="tag good">Đạt mức mong muốn</span>';
+  else tg.innerHTML = '<span class="tag warn">Dưới mức mong muốn</span>';
+  $("kCfLabel").textContent = loan && L > 0 ? "Dòng tiền / tháng sau trả nợ" : "Thu nhập ròng / tháng";
+  $("kCf").textContent = fmt(cfY / 12, 1);
+  $("kCf").style.color = cfY < 0 ? "var(--bad)" : "";
+  $("kPay").textContent = isFinite(pay) ? fmt(pay, 1) : "Không";
+
+  const rows = [
+    ["Tổng vốn đầu tư", fmt(V) + " tr"],
+    ["Doanh thu thực tế / tháng", fmt(Rm, 1) + " tr"],
+    ["Chi phí vận hành / tháng", fmt(costY / 12, 1) + " tr"],
+    ["Thu nhập ròng (NOI) / năm", fmt(NOI) + " tr", 1],
+    ["Lợi suất gộp", pct(gross)],
+    ["Lấp đầy tối thiểu để không lỗ", pct(be, 1)],
+    ["Giá mua tối đa để đạt " + pct(target, 1), fmt(maxPrice, 1) + " tỷ", 1],
+  ];
+  if (loan && L > 0) rows.push(
+    ["Số tiền vay", fmt(L) + " tr"],
+    ["Trả góp gốc + lãi / tháng", fmt(pmt, 1) + " tr"],
+    ["Vốn tự có cần bỏ ra", fmt(equity) + " tr"],
+    ["Dòng tiền / năm sau trả nợ", fmt(cfY) + " tr", 1],
+    ["Lợi suất tiền mặt trên vốn tự có", pct(coc)],
+    ["Lợi suất trên vốn tự có (tính cả gốc đã trả)", pct((cfY + debtY - int1) / equity)],
+    ["Hệ số trả nợ DSCR", isFinite(dscr) ? fmt(dscr, 2) + (dscr < 1 ? ' <span class="tag bad">Không đủ trả nợ</span>' : dscr < 1.2 ? ' <span class="tag warn">Sát ngưỡng</span>' : ' <span class="tag good">An toàn</span>') : "–"]
+  );
+  $("detail").innerHTML = rows.map(([k, v, h]) => `<div class="row${h ? " hl" : ""}"><span>${k}</span><span>${v}</span></div>`).join("");
+
+  // Độ nhạy
+  const occs = [0.7, 0.8, 0.85, 0.9, 1], mods = [-0.1, 0, 0.1];
+  let h = "<tr><th>Lấp đầy</th><th>Giá thuê −10%</th><th>Giá hiện tại</th><th>Giá thuê +10%</th></tr>";
+  occs.forEach(o => {
+    h += `<tr><td>${Math.round(o * 100)}%</td>`;
+    mods.forEach(m => {
+      const y = noiFor(M * (1 + m), o, other, F, p) / V;
+      const c = !isFinite(y) ? "" : y < 0 ? "bad" : y >= target ? "good" : "warn";
+      h += `<td class="${c}">${V > 0 ? pct(y) : "–"}</td>`;
+    });
+    h += "</tr>";
+  });
+  $("sens").innerHTML = h;
+
+  last = { price, rooms, M, occ, V, Rm, NOI, net, gross, pay, cfY, loan: loan && L > 0, L, equity, dscr };
+}
+document.addEventListener("input", e => { if (!e.target.closest(".cta")) calc(); });
+calc();
+
+/* --- Liên hệ --- */
+function applyContact() {
+  $("brandName").textContent = LIEN_HE.thuongHieu;
+  $("consentBrand").textContent = LIEN_HE.thuongHieu;
+  const parts = [LIEN_HE.thuongHieu, LIEN_HE.nguoiPhuTrach, LIEN_HE.dienThoai && ("ĐT/Zalo: " + LIEN_HE.dienThoai)].filter(Boolean);
+  $("footContact").textContent = parts.join(" · ");
+  const phone = LIEN_HE.dienThoai.replace(/\D/g, "");
+  if (phone) $("callBtn").href = "tel:" + phone;
+  else $("callBtn").style.display = "none";
+}
+applyContact();
+
+function toast(msg) { const t = $("toast"); t.textContent = msg; t.classList.add("on"); clearTimeout(t._h); t._h = setTimeout(() => t.classList.remove("on"), 3800); }
+
+function summary() {
+  const d = last;
+  const roomLines = [...tbody.querySelectorAll("tr")].map(tr => {
+    const n = tr.querySelector(".rn").value || "Phòng", c = tr.querySelector(".rc").value, r = tr.querySelector(".rr").value;
+    return c ? `  - ${n}: ${c} phòng x ${r} tr` : "";
+  }).filter(Boolean).join("\n");
+  let s = `PHIẾU DÒNG TIỀN TÒA NHÀ
+Khách: ${$("cName").value.trim()} - ${$("cPhone").value.trim()}
+Nhu cầu: ${$("cNeed").value}
+Tòa: ${$("name").value.trim() || "(chưa ghi)"}
+Giá: ${fmt(d.price, 1)} tỷ | ${fmt(d.rooms)} phòng | Lấp đầy ${fmt(d.occ * 100)}%
+${roomLines}
+Doanh thu thực tế: ${fmt(d.Rm, 1)} tr/tháng
+NOI: ${fmt(d.NOI)} tr/năm
+Lợi suất gộp: ${pct(d.gross)} | Lợi suất ròng: ${pct(d.net)}
+Hoàn vốn: ${isFinite(d.pay) ? fmt(d.pay, 1) + " năm" : "không hoàn vốn"}`;
+  if (d.loan) s += `\nVay ${fmt(d.L)} tr | Dòng tiền sau trả nợ: ${fmt(d.cfY / 12, 1)} tr/tháng | DSCR ${fmt(d.dscr, 2)}`;
+  return s;
+}
+
+$("sendZalo").onclick = async () => {
+  if (!$("cName").value.trim() || !$("cPhone").value.trim()) { $("err").textContent = "Vui lòng nhập họ tên và số điện thoại để chuyên viên liên hệ lại."; $("err").style.display = "block"; $("cName").focus(); return; }
+  if (!$("consent").checked) { $("err").textContent = "Vui lòng tick ô đồng ý để gửi phiếu cho chuyên viên."; $("err").style.display = "block"; $("consent").focus(); return; }
+  $("err").style.display = "none";
+  const text = summary();
+  let copied = false;
+  try { await navigator.clipboard.writeText(text); copied = true; } catch (e) {
+    try { const ta = document.createElement("textarea"); ta.value = text; document.body.appendChild(ta); ta.select(); copied = document.execCommand("copy"); ta.remove(); } catch (e2) {}
+  }
+  const z = LIEN_HE.zalo.replace(/\D/g, "");
+  if (!z) { toast(copied ? "Đã sao chép nội dung phiếu. (Chưa cài số Zalo nhận phiếu)" : "Chưa cài số Zalo nhận phiếu"); return; }
+  toast(copied ? "Đã sao chép phiếu. Mở Zalo, dán vào và gửi." : "Mở Zalo… vui lòng chụp màn hình phiếu để gửi.");
+  setTimeout(() => {
+    const url = "https://zalo.me/" + z;
+    const w = window.open(url, "_blank", "noopener");
+    if (!w) { try { window.top.location.href = url; } catch (e) { location.href = url; } }
+  }, 600);
+};
+$("printBtn").onclick = () => window.print();
+</script>
+</body>
+</html>

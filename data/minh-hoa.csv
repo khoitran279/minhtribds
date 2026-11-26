@@ -1,0 +1,6 @@
+Mã SP,Loại hình,Hình thức,Tên đường (công khai trên web),Phường (mới),Khu vực (quận cũ),Diện tích đất (m²),Mặt tiền (m),Số tầng,Số phòng / căn,Đường / ngõ,Pháp lý,Giá bán (tỷ),Giá cho thuê (tr/tháng),Đơn giá bán (tr/m²),Doanh thu thuê hiện tại (tr/tháng),Lợi suất gộp/năm,Trạng thái,Ngày cập nhật,DT sử dụng (m²),DT xây dựng (m²),Hiện trạng,Cho thuê khoán (tr/tháng),Mô tả ngắn (web),Ảnh đại diện (link Drive, để công khai)
+MH-01,Tòa CHDV cho thuê,Bán,Phố minh họa A,Phường minh họa,Cầu Giấy,80.0,5.0,8,16,Ngõ ô tô,Sổ đỏ chính chủ,28.00,,350,180,7.7%,Đang chào,26/11/2026,560,72,Đang vận hành,150,"Dòng minh họa để xem bố cục.
+Thay bằng mô tả thật: quy mô, số phòng mỗi tầng, khoảng cách ra phố, nội thất bàn giao.",
+MH-02,Tòa văn phòng cho thuê,Bán,Phố minh họa B,Phường minh họa,Đống Đa,120.0,7.0,9,9 sàn,Mặt phố,Sổ đỏ chính chủ,62.00,,517,320,6.2%,Đang chào,20/11/2026,950,110,Đang vận hành,,Dòng minh họa.,
+MH-03,Tòa CHDV cho thuê,Bán,Phố minh họa C,Phường minh họa,Thanh Xuân,65.0,4.5,7,14,Ngõ ba gác,Sổ đỏ chính chủ,17.50,,269,118,8.1%,Đang chào,18/11/2026,420,60,Đã hoàn thiện,100,Dòng minh họa.,
+MH-04,Đất xây CHDV,Bán,Phố minh họa D,Phường minh họa,Cầu Giấy,95.0,6.0,,,Ngõ ô tô,Sổ đỏ chính chủ,21.00,,221,,,Đã bán / cho thuê,10/11/2026,,,Đất trống,,Dòng minh họa.,
